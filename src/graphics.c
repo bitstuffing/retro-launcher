@@ -2,6 +2,62 @@
 #include "colors.h"
 #include <SDL/SDL_ttf.h>
 
+void take_screenshot(SDL_Surface *screen, SDL_Surface *screenshot) {
+    SDL_BlitSurface(screen, NULL, screenshot, NULL);
+}
+
+void pixelate(SDL_Surface *screen, SDL_Surface *screenshot, int frames, int pixel_chunk, int out) {
+    // 1. Basic check
+    if (!screen || !screenshot) {
+        fprintf(stderr, "Error: Null surface\n");
+        return;
+    }
+
+    // 2. In SDL 1.2 there is no SDL_ConvertSurfaceFormat, we use SDL_DisplayFormat
+    SDL_Surface *temp_screenshot = SDL_DisplayFormat(screenshot);
+    if (!temp_screenshot) {
+        fprintf(stderr, "Error converting surface: %s\n", SDL_GetError());
+        return;
+    }
+
+    // 3. Safe processing
+    for (int i = 0; i < frames; i++) {
+        if (SDL_LockSurface(screen) || SDL_LockSurface(temp_screenshot)) {
+            fprintf(stderr, "Error locking surfaces: %s\n", SDL_GetError());
+            SDL_FreeSurface(temp_screenshot);
+            return;
+        }
+
+        Uint32 *src = (Uint32 *)temp_screenshot->pixels;
+        Uint32 *dst = (Uint32 *)screen->pixels;
+        int pitch = screen->pitch / 4;
+
+        for (int y = 0; y < screen->h; y += pixel_chunk) {
+            for (int x = 0; x < screen->w; x += pixel_chunk) {
+                int mx = (x < screen->w) ? x : screen->w - 1;
+                int my = (y < screen->h) ? y : screen->h - 1;
+                Uint32 color = src[my * pitch + mx];
+
+                for (int py = y; py < y + pixel_chunk && py < screen->h; py++) {
+                    for (int px = x; px < x + pixel_chunk && px < screen->w; px++) {
+                        dst[py * pitch + px] = color;
+                    }
+                }
+            }
+        }
+
+        SDL_UnlockSurface(temp_screenshot);
+        SDL_UnlockSurface(screen);
+        SDL_Flip(screen);
+
+        pixel_chunk = out ? pixel_chunk + 2 : pixel_chunk - 2;
+        if (pixel_chunk < 1) pixel_chunk = 1;
+        SDL_Delay(16);
+    }
+
+    SDL_FreeSurface(temp_screenshot);
+}
+
 void draw_arcade_title(SDL_Surface *screen, const char *title) {
     TTF_Font *font = TTF_OpenFont("assets/fonts/PressStart2P.ttf", 36);
     SDL_Color color = { 0xFF, 0x00, 0xFF }; 

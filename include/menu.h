@@ -17,6 +17,6 @@ typedef enum {
 void draw_menu(SDL_Surface *screen, int selected_option);
 
 // Executes the selected option
-void execute_option(MenuOption option);
+void execute_option(SDL_Surface *screen, MenuOption option);
 
 #endif

@@ -19,7 +19,7 @@ int main() {
         }
 
         if (action == INPUT_SELECT) {
-            execute_option(selected_option);
+            execute_option(screen, selected_option);
         }
         
         SDL_Delay(16); // 60 FPS

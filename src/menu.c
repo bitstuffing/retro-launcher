@@ -21,7 +21,26 @@ void draw_menu(SDL_Surface *screen, int selected_option) {
     SDL_Flip(screen);
 }
 
-void execute_option(MenuOption option) {
+void execute_option(SDL_Surface *screen, MenuOption option) {
+    // create a surface with the same format as 'screen' (to avoid screen permissions issues)
+    SDL_Surface *screenshot = SDL_CreateRGBSurface(
+        0,
+        screen->w, screen->h,
+        32,
+        screen->format->Rmask,
+        screen->format->Gmask,
+        screen->format->Bmask,
+        screen->format->Amask
+    );
+
+    if (!screenshot) {
+        fprintf(stderr, "Error al crear screenshot: %s\n", SDL_GetError());
+        return;
+    }
+
+    take_screenshot(screen, screenshot);
+    pixelate(screen, screenshot, 15, 4, 1);
+
     switch (option) {
         case OPTION_EMUSTATION: system("emulationstation &"); break;
         case OPTION_INTERNET:   system("./scripts/internet.sh &"); break;

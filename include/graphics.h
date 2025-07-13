@@ -31,4 +31,8 @@ void draw_arcade_title(SDL_Surface *screen, const char *title);
 // Draws the arcade menu border
 void draw_arcade_border(SDL_Surface *screen);
 
+// pixelate effect functions
+void take_screenshot(SDL_Surface *screen, SDL_Surface *screenshot);
+void pixelate(SDL_Surface *screen, SDL_Surface *screenshot, int frames, int pixel_chunk, int out);
+
 #endif
