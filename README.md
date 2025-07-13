@@ -1,6 +1,6 @@
-# Retro Launcher - 80/90s-Style Menu for Raspberry Pi
+# Retro Launcher - 80/90s-Style Menu for Single Board Computers
 
-A 90s-style launcher for Raspberry Pi, designed to run directly in the console (no X11). Compatible with keyboard and USB/SNES controllers.
+A 90s-style launcher for Single Board Computers, designed to run directly in the console (no X11). Compatible with keyboard and USB/SNES controllers.
 
 ## Features
 At this moment is just a prototype, so milestones are:
@@ -11,7 +11,7 @@ At this moment is just a prototype, so milestones are:
     - TODO (configurable)
 
 ## Requirements
-- Raspberry Pi 4 (or similar).
+- Raspberry Pi 4 (or similar SBC).
 - SDL 1.2 and SDL_ttf installed.
 - Monitor/TV compatible with low resolutions (at this moment it's prepared for 640x480).
 
