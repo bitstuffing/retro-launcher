@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 typedef enum {
     INPUT_NONE,
@@ -13,5 +13,6 @@ typedef enum {
 
 void init_input();
 InputAction get_input_action();
+void update_menu(InputAction action, int *selected_option);
 
 #endif

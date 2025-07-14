@@ -2,9 +2,9 @@
 #include "graphics.h"
 #include <stdlib.h>
 
-void draw_menu(SDL_Surface *screen, int selected_option) {
-    draw_arcade_background(screen);
-    draw_arcade_title(screen, "Retro Launcher");
+void draw_menu(SDL_Renderer *renderer, int selected_option) {
+    draw_arcade_background(renderer);
+    draw_arcade_title(renderer, "Retro Launcher");
     
     const char *options[OPTION_COUNT] = {
         "Retro Emulation",
@@ -15,31 +15,26 @@ void draw_menu(SDL_Surface *screen, int selected_option) {
     };
 
     for (int i = 0; i < OPTION_COUNT; i++) {
-        draw_90s_button(screen, 200, 100 + i * 60, 200, 50, options[i], (i == selected_option));
+        draw_90s_button(renderer, 200, 100 + i * 60, 200, 50, options[i], (i == selected_option));
     }
 
-    SDL_Flip(screen);
+    SDL_RenderPresent(renderer);
 }
 
-void execute_option(SDL_Surface *screen, MenuOption option) {
+void execute_option(SDL_Renderer *renderer, MenuOption option) {
     // create a surface with the same format as 'screen' (to avoid screen permissions issues)
-    SDL_Surface *screenshot = SDL_CreateRGBSurface(
-        0,
-        screen->w, screen->h,
-        32,
-        screen->format->Rmask,
-        screen->format->Gmask,
-        screen->format->Bmask,
-        screen->format->Amask
-    );
-
+    SDL_Texture *screenshot = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 640, 480);
     if (!screenshot) {
-        fprintf(stderr, "Error al crear screenshot: %s\n", SDL_GetError());
+        fprintf(stderr, "Error al crear la textura para el screenshot: %s\n", SDL_GetError());
         return;
     }
 
-    take_screenshot(screen, screenshot);
-    pixelate(screen, screenshot, 15, 4, 1);
+    SDL_SetRenderTarget(renderer, screenshot);
+    SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_ARGB8888, NULL, 0); // Leer los píxeles del renderer
+
+    SDL_SetRenderTarget(renderer, NULL);
+
+    pixelate(renderer, screenshot, 15, 4, 1);
 
     switch (option) {
         case OPTION_EMUSTATION: system("emulationstation &"); break;
@@ -49,4 +44,6 @@ void execute_option(SDL_Surface *screen, MenuOption option) {
         case OPTION_QUIT:       exit(0);
         default:                break;
     }
+
+    SDL_DestroyTexture(screenshot);
 }

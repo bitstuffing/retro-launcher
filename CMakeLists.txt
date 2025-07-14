@@ -4,12 +4,12 @@ project(RetroMenu VERSION 1.0 LANGUAGES C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 
-find_package(SDL REQUIRED)
-find_package(SDL_ttf REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 include_directories(
-    ${SDL_INCLUDE_DIR}
-    ${SDL_TTF_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIRS}
+    ${SDL2_TTF_INCLUDE_DIRS}
     ${PROJECT_SOURCE_DIR}/include
 )
 
@@ -23,8 +23,8 @@ add_executable(retro_menu
 )
 
 target_link_libraries(retro_menu
-    ${SDL_LIBRARY}
-    ${SDL_TTF_LIBRARY}
+    ${SDL2_LIBRARIES}
+    SDL2_ttf
 )
 
 install(TARGETS retro_menu DESTINATION bin)

@@ -2,8 +2,10 @@
 #include "input.h"
 #include "menu.h"
 
+#include <SDL2/SDL_ttf.h>
+
 int main() {
-    SDL_Surface *screen = init_graphics();
+    SDL_Renderer *screen = init_graphics();
     init_input();
     
     int selected_option = 0;
@@ -24,7 +26,7 @@ int main() {
         
         SDL_Delay(16); // 60 FPS
     }
-    
+    cleanup_graphics(screen);
     TTF_Quit();
     SDL_Quit();
     return 0;

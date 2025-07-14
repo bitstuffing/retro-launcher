@@ -20,6 +20,10 @@ At this moment is just a prototype, so milestones are:
 # Install dependencies
 sudo apt-get install libsdl1.2-dev libsdl-ttf2.0-dev cmake joystick
 
+or
+
+sudo pacman -S sdl2 sdl2_ttf
+
 # Clone and build
 git clone https://github.com/bitstuffing/retro_menu.git
 cd retro_menu

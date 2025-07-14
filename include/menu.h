@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 // Menu options
 typedef enum {
@@ -14,9 +14,9 @@ typedef enum {
 } MenuOption;
 
 // Draws the complete menu
-void draw_menu(SDL_Surface *screen, int selected_option);
+void draw_menu(SDL_Renderer *screen, int selected_option);
 
 // Executes the selected option
-void execute_option(SDL_Surface *screen, MenuOption option);
+void execute_option(SDL_Renderer *screen, MenuOption option);
 
 #endif
